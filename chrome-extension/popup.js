@@ -1,5 +1,9 @@
-function renderStatus(statusText) {
-	document.getElementById('status').textContent = statusText;
+function renderWorkersStatus(text) {
+	document.getElementById('workers_status').textContent = text;
+}
+
+function renderInstanceInfo(text) {
+	document.getElementById('instance_info').textContent = text;
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -11,13 +15,16 @@ document.addEventListener('DOMContentLoaded', function() {
 			workers_status += "worker " + d.host + ":" + d.instance + " is " + d.status + ".\n";
 		});
 
-		renderStatus(workers_status);
+		renderWorkersStatus(workers_status);
 	}
 
-	$.getJSON("http://innoko.suse.de/api/v1/workers", function(data){
+	var instanceUrl = openqaNotifierSettings.settings.get('instanceUrl');
+	renderInstanceInfo(instanceUrl);
+
+	$.getJSON(instanceUrl + "api/v1/workers", function(data){
 	}).done(function(data){
 		processJson(data);
 	}).fail(function(jqXHR, textStatus, errorThrown){
-		renderStatus("Something goes wrong!");
+		renderWorkersStatus("Something goes wrong!");
 	});
 });

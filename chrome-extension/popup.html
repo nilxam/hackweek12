@@ -4,21 +4,32 @@
     <title>openQA Notifier</title>
 	<link rel="stylesheet" href="css/chrome-bootstrap.css">
     <style>
-      #status {
-        /* avoid an excessively wide status text */
+      #instance_info {
+        white-space: pre;
+        text-overflow: ellipsis;
+		text-align: center;
+		font-weight: bold;
+		min-width: 300px;
+        max-width: 500px;
+      }
+      #workers_status, #results_list {
         white-space: pre;
         text-overflow: ellipsis;
         overflow: hidden;
-		min-width: 200px;
-        max-width: 400px;
+		min-width: 300px;
+        max-width: 500px;
       }
     </style>
     <script src="popup.js"></script>
+    <script src="settings.js"></script>
     <script src="jquery-2.1.3.min.js"></script>
   </head>
   <body>
-	  <h2>your host</h2>
-	  <div id="status"></div>
+	  <div id="instance_info">your host</div>
+	  <hr width="80%">
+	  <div id="workers_status"></div>
+	  <hr width="80%">
+	  <div id="results_list"></div>
   </body>
 </html>
 

@@ -6,11 +6,17 @@
 	"background": {
 		"persistent": false,
 		"scripts": [
+			"settings.js",
 			"jquery-2.1.3.min.js"
 		]
 	},
 	"permissions": [
-		 "alarms"
+		"alarms",
+		"http://openqa.opensuse.org/",
+		"https://openqa.opensuse.org/"
+	],
+	"optional_permissions": [
+		"*://*/"
 	],
 	"browser_action": {
 		"default_icon": "icon.png",
