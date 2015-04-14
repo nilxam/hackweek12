@@ -1,6 +1,7 @@
 {
 	"name": "openQA Notifier",
 	"version": "0.1",
+	"homepage_url": "https://github.com/nilxam/hackweek12",
 	"manifest_version": 2,
 	"background": {
 		"persistent": false,
