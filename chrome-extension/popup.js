@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	function processJson(json) {
 	    var workers_status="";
 		// sorting the content by instance number
-		json.workers.sort(function(a,b) { return a.instance - b.instance } );
+		json.workers.sort(function(a,b) { return a.id - b.id } );
 		$.each(json.workers, function(index, d){
 			workers_status += "worker " + d.host + ":" + d.instance + " is " + d.status + ".\n";
 		});

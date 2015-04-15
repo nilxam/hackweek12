@@ -3,9 +3,13 @@
 
 	document.addEventListener('DOMContentLoaded', function () {
 		var instanceUrl = document.getElementById('instance_url');
+		var versionName = document.getElementById('version_name');
+		var distriName = document.getElementById('distri_name');
 
 		function loadSettings() {
 			instanceUrl.value = openqaNotifierSettings.settings.get('instanceUrl');
+			versionName.value = openqaNotifierSettings.settings.get('versionName');
+			distriName.value = openqaNotifierSettings.settings.get('distriName');
 		}
 
 		loadSettings();

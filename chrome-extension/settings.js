@@ -4,6 +4,8 @@
 	window.openqaNotifierSettings = (function () {
 		var defaults = {
 			instanceUrl: 'http://openqa.opensuse.org/',
+			versionName: 'openSUSE',
+			distriName: 'Tumbleweed',
 		};
 
 		var data = {
