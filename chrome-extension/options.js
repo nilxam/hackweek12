@@ -3,13 +3,11 @@
 
 	document.addEventListener('DOMContentLoaded', function () {
 		var instanceUrl = document.getElementById('instance_url');
-		var versionName = document.getElementById('version_name');
-		var distriName = document.getElementById('distri_name');
+		var limitsNum = document.getElementById('limits');
 
 		function loadSettings() {
 			instanceUrl.value = openqaNotifierSettings.settings.get('instanceUrl');
-			versionName.value = openqaNotifierSettings.settings.get('versionName');
-			distriName.value = openqaNotifierSettings.settings.get('distriName');
+			limitsNum.value = openqaNotifierSettings.settings.get('limits');
 		}
 
 		loadSettings();
@@ -18,15 +16,9 @@
 			var url = instanceUrl.value;
 			url = /\/$/.test(url) ? url : url + '/';
 
-			chrome.permissions.contains({
-				origins:[url]
-			}, function (result) {
-				if (result) {
-					chrome.permissions.remove({
-						origins: [url]
-					});
-				}
-			});
+			// set limits
+			openqaNotifierSettings.settings.set('limits', limitsNum.value);
+
 			// TODO: doesn't work with redirect
 			chrome.permissions.request({
 				origins: [url]
@@ -34,18 +26,15 @@
 				if (granted) {
 					openqaNotifierSettings.settings.set('instanceUrl', url);
 
-					loadSettings();
+					chrome.runtime.sendMessage('querying');
 				} else {
 					console.error('Permission not granted', chrome.runtime.lastError.message);
 				}
 			});
+			loadSettings();
 		});
 
 		document.getElementById('reset').addEventListener('click', function () {
-			chrome.permissions.remove({
-				origins: [openqaNotifierSettings.settings.get('instanceUrl')]
-			});
-
 			openqaNotifierSettings.settings.reset();
 			loadSettings();
 		});
