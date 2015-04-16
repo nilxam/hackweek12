@@ -3,14 +3,9 @@
 	<head>
 		<meta charset="utf-8">
 		<title>openQA Notifier</title>
-		<link rel="stylesheet" href="css/chrome-bootstrap.css">
 		<style>
-			.chrome-bootstrap .frame .view {
-				-webkit-margin-start: 170px
-			}
-
 			input[type='text'] {
-				width: 350px;
+				width: 300px;
 			}
 		</style>
 		<script src="settings.js"></script>
@@ -19,9 +14,7 @@
 	<body class="chrome-bootstrap">
 		<div class="frame">
 			<div class="navigation">
-				<h1>
-					<a href="http://os-autoinst.github.io/openQA/">openQA Notifier</a>
-				</h1>
+				<h1>openQA Notifier</h1>
 			</div>
 			<div class="mainview view">
 				<div id="settings" class="selected">
@@ -30,21 +23,29 @@
 					</header>
 					<div class="content">
 						<section>
+							<p>
 							<h3>Custom URL</h3>
 							<p>Specify the instance URL to your openQA host.</p>
-							<label for="instance_url">Instance URL</label>
+							<label for="instance_url">Instance URL</label></p>
 							<input type="text" id="instance_url" autofocus>
+							</p>
 						</section>
 						<section>
+							<p>
 							<h3>Limits</h3>
 							<p>The quantity of the last jobs to display. Max. number of limits is 20.</p>
 							<label for="limits">Quantity</label>
 							<input type="number" id="limits" min="1" max="20" value=1/>
+							</p>
 						</section>
+						<section>
+							<p>
 						<div class="controls">
 							<button id="save">Save</button>
 							<button id="reset">Reset to Default</button>
 						</div>
+							</p>
+						</section>
 					</div>
 				</div>
 			</div>
