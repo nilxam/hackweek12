@@ -2,6 +2,8 @@
 function querying() {
 	'use strict';
 
+	var latestJobID = openqaNotifierSettings.settings.get('latestJobID');
+
 	function renderBadge(text, color) {
 		// #5CBFA5 green
 		// #BF5C76 red
@@ -14,45 +16,44 @@ function querying() {
 		});
 	}
 
-	function processJson(type, json) {
-		var has_warning = 0;
+	function processJson(type, json, oldJobID, newJobID) {
+		var hasWarning = openqaNotifierSettings.settings.get('hasWarning');
+		var returnText="";
 		if (type == 'workers') {
-			var workers_status="";
 			// sorting the content by id
 			//json.workers.sort(function(a,b) { return a.id - b.id } );
 			$.each(json.workers, function(index, d){
-				workers_status += "worker " + d.host + ":" + d.instance + " is " + d.status + ".\n";
+				returnText += "worker " + d.host + ":" + d.instance + " is " + d.status + ".\n";
 				if ( d.status == "dead" ) {
-					has_warning++;
+					hasWarning = 1;
 				}
 			});
-			if ( has_warning > 0 ) {
+			if ( hasWarning > 0 ) {
 				renderBadge('!', '#BF5C76');
 			} else {
 				renderBadge(' ', '#5CBFA5');
 			}
-
-			return workers_status;
 		} else if (type == 'jobs') {
-			var results_list="";
 			if (json.jobs.length > 0) {
 				$.each(json.jobs, function(index, d){
-					results_list += d.id + ": " + d.name + " is " + d.state + "/" + d.result + ".\n";
-					if ( d.result == "failed" ) {
-						has_warning++;
+					returnText += d.id + ": " + d.name + " is " + d.state + "/" + d.result + ".\n";
+					if ( d.id > oldJobID && newJobID >= d.id) {
+						if ( d.result == "failed" || d.result == "incomplete" ) {
+							hasWarning = 1;
+						}
 					}
 				});
-				if ( has_warning > 0 ) {
+				if ( hasWarning > 0 ) {
 					renderBadge('!', '#BF5C76');
 				} else {
 					renderBadge(' ', '#5CBFA5');
 				}
 			} else {
-				results_list += "No Data!";
+				returnText += "No Data!";
 			}
-
-			return results_list;
 		}
+		openqaNotifierSettings.settings.set('hasWarning', hasWarning);
+		return returnText;
 	}
 
 	var instanceUrl = openqaNotifierSettings.settings.get('instanceUrl');
@@ -70,8 +71,12 @@ function querying() {
 	$.getJSON(instanceUrl + "api/v1/jobs?scope=current&limit=" + limitsVal, function(data){
 	}).done(function(data){
 		// update results list
-		var resultsList = processJson('jobs', data);
+		var resultsList = processJson('jobs', data, latestJobID, data.jobs[0].id);
 		openqaNotifierSettings.settings.set('resultsList', resultsList);
+
+		if (data.jobs[0].id > latestJobID) {
+			openqaNotifierSettings.settings.set('latestJobID', data.jobs[0].id);	
+		}
 	}).fail(function(jqXHR, textStatus, errorThrown){
 		openqaNotifierSettings.settings.set('resultsList', "Something goes wrond!");
 	});

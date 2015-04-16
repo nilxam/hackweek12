@@ -5,6 +5,10 @@
 		var defaults = {
 			instanceUrl: 'http://openqa.opensuse.org/',
 			limits: 10,
+			workersStatus: "Loading...",
+			resultsList: "Loading...",
+			latestJobID: 1,
+			hasWarning: 0,
 		};
 
 		var data = {

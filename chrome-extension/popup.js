@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	renderInstanceInfo(openqaNotifierSettings.settings.get('instanceUrl'));
 	renderWorkersStatus(openqaNotifierSettings.settings.get('workersStatus'));
 	renderResultsList(openqaNotifierSettings.settings.get('resultsList'));
+	// reset hasWarning flag
+	openqaNotifierSettings.settings.set('hasWarning', 0);
 	// reset badge
 	chrome.browserAction.setBadgeText({ text: '' });
 });
