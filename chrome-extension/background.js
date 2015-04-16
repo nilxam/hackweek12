@@ -36,7 +36,7 @@ function querying() {
 		} else if (type == 'jobs') {
 			if (json.jobs.length > 0) {
 				$.each(json.jobs, function(index, d){
-					returnText += d.id + ": " + d.name + " is " + d.state + "/" + d.result + ".\n";
+					returnText += "job" + d.id + ": " + d.name + " is " + d.state + " / " + d.result + ".\n";
 					if ( d.id > oldJobID && newJobID >= d.id) {
 						if ( d.result == "failed" || d.result == "incomplete" ) {
 							hasWarning = 1;
