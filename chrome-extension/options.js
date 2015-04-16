@@ -38,6 +38,7 @@
 		document.getElementById('reset').addEventListener('click', function () {
 			openqaNotifierSettings.settings.reset();
 			loadSettings();
+			chrome.runtime.sendMessage('querying');
 		});
 	});
 })();
