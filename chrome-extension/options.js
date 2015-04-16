@@ -26,12 +26,13 @@
 				if (granted) {
 					openqaNotifierSettings.settings.set('instanceUrl', url);
 
+					loadSettings();
 					chrome.runtime.sendMessage('querying');
 				} else {
+					loadSettings();
 					console.error('Permission not granted', chrome.runtime.lastError.message);
 				}
 			});
-			loadSettings();
 		});
 
 		document.getElementById('reset').addEventListener('click', function () {

@@ -1,6 +1,3 @@
-//var instanceInfo='Your host';
-//var workersStatus='Loading...';
-//var resultsList='Loading...';
 
 function querying() {
 
@@ -27,26 +24,25 @@ function querying() {
 		}
 	}
 
-	var instanceInfo = openqaNotifierSettings.settings.get('instanceUrl');
-	chrome.storage.local.set({'instanceInfo': instanceInfo});
+	var instanceUrl = openqaNotifierSettings.settings.get('instanceUrl');
 
 	// query workers
-	$.getJSON(instanceInfo + "api/v1/workers", function(data){
+	$.getJSON(instanceUrl + "api/v1/workers", function(data){
 	}).done(function(data){
 		var workersStatus = processJson('workers', data);
-		chrome.storage.local.set({'workersStatus': workersStatus});
+		openqaNotifierSettings.settings.set('workersStatus', workersStatus);
 	}).fail(function(jqXHR, textStatus, errorThrown){
-		chrome.storage.local.set({'workersStatus': "Something goes wrong!"});
+		openqaNotifierSettings.settings.set('workersStatus', "Something goes wrond!");
 	});
 
 	var limitsVal = openqaNotifierSettings.settings.get('limits');
 	// query jobs, do not show cloned jobs
-	$.getJSON(instanceInfo + "api/v1/jobs?scope=current&limit=" + limitsVal, function(data){
+	$.getJSON(instanceUrl + "api/v1/jobs?scope=current&limit=" + limitsVal, function(data){
 	}).done(function(data){
 		var resultsList = processJson('jobs', data);
-		chrome.storage.local.set({'resultsList': resultsList});
+		openqaNotifierSettings.settings.set('resultsList', resultsList);
 	}).fail(function(jqXHR, textStatus, errorThrown){
-		chrome.storage.local.set({'resultsList': "Something goes wrong!"});
+		openqaNotifierSettings.settings.set('resultsList', "Something goes wrond!");
 	});
 }
 

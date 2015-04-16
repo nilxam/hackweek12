@@ -11,13 +11,7 @@ function renderResultsList(text) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-	chrome.storage.local.get('instanceInfo', function (result) {
-	    renderInstanceInfo(result.instanceInfo);
-	});
-	chrome.storage.local.get('workersStatus', function (result) {
-	    renderWorkersStatus(result.workersStatus);
-	});
-	chrome.storage.local.get('resultsList', function (result) {
-	   renderResultsList(result.resultsList);
-	});
+	renderInstanceInfo(openqaNotifierSettings.settings.get('instanceUrl'));
+	renderWorkersStatus(openqaNotifierSettings.settings.get('workersStatus'));
+	renderResultsList(openqaNotifierSettings.settings.get('resultsList'));
 });
