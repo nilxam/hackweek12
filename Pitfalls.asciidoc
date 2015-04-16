@@ -1,0 +1,7 @@
+Pitfalls
+--------
+
+Your openQA instance must be includes https://github.com/os-autoinst/openQA/pull/339[this patch]
+in order to allow openQA Notifier can pass 'limit' parameter, otherwise,
+it might causes the timeout or cannot read the date due to heavy loading
+if your instance have huge tests result.

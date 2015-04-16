@@ -1,0 +1,22 @@
+openQA Notifier
+===============
+
+Features
+--------
+
+openQA Notifier will query your test jobs result from your openQA
+instance(every 5 minutes), and notify/display the message below.
+
+* Workers status.
+* Last few jobs result depand on how many limits variable sets.
+* Change the Badge to red color if have failed/incomplete job result
+  since last last time checked the notification page.
+* Change the Badge to green color if have not failed/incomplete job
+  result since last time checked the notification page.
+
+
+Author
+------
+
+Yu-Chen "Max" Lin
+mlin@suse.com
