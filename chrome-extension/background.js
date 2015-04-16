@@ -29,7 +29,7 @@ function querying() {
 			if (json.jobs.length > 0) {
 				$.each(json.jobs, function(index, d){
 					results_list += d.id + ": " + d.name + " is " + d.state + "/" + d.result + ".\n";
-					if (d.result == "failed" && openqaNotifierSettings.settings.get('hasNewJob') > 0) {
+					if (d.result == "failed" ) {
 						openqaNotifierSettings.settings.set('hasWarning', 1);
 					}
 				});
@@ -38,11 +38,6 @@ function querying() {
 			}
 			return results_list;
 		}
-	}
-
-	var preLastJobID = openqaNotifierSettings.settings.get('lastJobID');
-	if (preLastJobID === null || preLastJobID === undefined) {
-		preLastJobID = 0;
 	}
 
 	var instanceUrl = openqaNotifierSettings.settings.get('instanceUrl');
@@ -59,23 +54,14 @@ function querying() {
 	// query jobs, do not show cloned jobs
 	$.getJSON(instanceUrl + "api/v1/jobs?scope=current&limit=" + limitsVal, function(data){
 	}).done(function(data){
-		var lastJobID = data.jobs[0].id;
-
 		// update results list
 		var resultsList = processJson('jobs', data);
 		openqaNotifierSettings.settings.set('resultsList', resultsList);
-
-		if (preLastJobID != 0 && lastJobID > preLastJobID) {
-			openqaNotifierSettings.settings.set('hasNewJob', 1);
-		} else {
-			openqaNotifierSettings.settings.set('hasNewJob', 0);
-		}
-		openqaNotifierSettings.settings.set('lastJobID', lastJobID);
 	}).fail(function(jqXHR, textStatus, errorThrown){
 		openqaNotifierSettings.settings.set('resultsList', "Something goes wrond!");
 	});
 
-	if(openqaNotifierSettings.settings.get('hasWarning')) {
+	if ( openqaNotifierSettings.settings.get('hasWarning') > 0) {
 		renderBadge('!', '#BF5C76');
 	} else {
 		renderBadge(' ', '#5CBFA5');
