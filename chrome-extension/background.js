@@ -83,7 +83,7 @@ function querying() {
 
 }
 
-chrome.alarms.create({periodInMinutes: 1});
+chrome.alarms.create({periodInMinutes: 5});
 chrome.alarms.onAlarm.addListener(querying);
 chrome.runtime.onMessage.addListener(querying);
 
