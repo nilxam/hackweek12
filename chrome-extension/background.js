@@ -27,12 +27,18 @@ function querying() {
 		} else if (type == 'jobs') {
 			var results_list="";
 			if (json.jobs.length > 0) {
+				var has_warning = 0
 				$.each(json.jobs, function(index, d){
 					results_list += d.id + ": " + d.name + " is " + d.state + "/" + d.result + ".\n";
 					if (d.result == "failed" ) {
-						openqaNotifierSettings.settings.set('hasWarning', 1);
+						has_warning = 1;
 					}
 				});
+				if ( has_warning > 0 ) {
+					renderBadge('!', '#BF5C76');
+				} else {
+					renderBadge(' ', '#5CBFA5');
+				}
 			} else {
 				results_list += "No Data!";
 			}
@@ -61,11 +67,6 @@ function querying() {
 		openqaNotifierSettings.settings.set('resultsList', "Something goes wrond!");
 	});
 
-	if ( openqaNotifierSettings.settings.get('hasWarning') > 0) {
-		renderBadge('!', '#BF5C76');
-	} else {
-		renderBadge(' ', '#5CBFA5');
-	}
 }
 
 chrome.alarms.create({periodInMinutes: 1});
