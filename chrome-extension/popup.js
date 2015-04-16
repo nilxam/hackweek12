@@ -14,4 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	renderInstanceInfo(openqaNotifierSettings.settings.get('instanceUrl'));
 	renderWorkersStatus(openqaNotifierSettings.settings.get('workersStatus'));
 	renderResultsList(openqaNotifierSettings.settings.get('resultsList'));
+	if (openqaNotifierSettings.settings.get('hasWarning')) {
+		chrome.browserAction.setBadgeText({ text: '' });
+		openqaNotifierSettings.settings.set('hasWarning', 0);
+	}
 });

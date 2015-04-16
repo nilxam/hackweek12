@@ -1,5 +1,18 @@
 
 function querying() {
+	'use strict';
+
+	function renderBadge(text, color) {
+		// #5CBFA5 green
+		// #BF5C76 red
+		chrome.browserAction.setBadgeText({
+			text: text
+		});
+
+		chrome.browserAction.setBadgeBackgroundColor({
+			color: color
+		});
+	}
 
 	function processJson(type, json) {
 		if (type == 'workers') {
@@ -16,6 +29,9 @@ function querying() {
 			if (json.jobs.length > 0) {
 				$.each(json.jobs, function(index, d){
 					results_list += d.id + ": " + d.name + " is " + d.state + "/" + d.result + ".\n";
+					if (d.result == "failed" && openqaNotifierSettings.settings.get('hasNewJob') > 0) {
+						openqaNotifierSettings.settings.set('hasWarning', 1);
+					}
 				});
 			} else {
 				results_list += "No Data!";
@@ -24,8 +40,12 @@ function querying() {
 		}
 	}
 
-	var instanceUrl = openqaNotifierSettings.settings.get('instanceUrl');
+	var preLastJobID = openqaNotifierSettings.settings.get('lastJobID');
+	if (preLastJobID === null || preLastJobID === undefined) {
+		preLastJobID = 0;
+	}
 
+	var instanceUrl = openqaNotifierSettings.settings.get('instanceUrl');
 	// query workers
 	$.getJSON(instanceUrl + "api/v1/workers", function(data){
 	}).done(function(data){
@@ -39,11 +59,27 @@ function querying() {
 	// query jobs, do not show cloned jobs
 	$.getJSON(instanceUrl + "api/v1/jobs?scope=current&limit=" + limitsVal, function(data){
 	}).done(function(data){
+		var lastJobID = data.jobs[0].id;
+
+		// update results list
 		var resultsList = processJson('jobs', data);
 		openqaNotifierSettings.settings.set('resultsList', resultsList);
+
+		if (preLastJobID != 0 && lastJobID > preLastJobID) {
+			openqaNotifierSettings.settings.set('hasNewJob', 1);
+		} else {
+			openqaNotifierSettings.settings.set('hasNewJob', 0);
+		}
+		openqaNotifierSettings.settings.set('lastJobID', lastJobID);
 	}).fail(function(jqXHR, textStatus, errorThrown){
 		openqaNotifierSettings.settings.set('resultsList', "Something goes wrond!");
 	});
+
+	if(openqaNotifierSettings.settings.get('hasWarning')) {
+		renderBadge('!', '#BF5C76');
+	} else {
+		renderBadge(' ', '#5CBFA5');
+	}
 }
 
 chrome.alarms.create({periodInMinutes: 1});
