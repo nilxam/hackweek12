@@ -15,23 +15,31 @@ function querying() {
 	}
 
 	function processJson(type, json) {
+		var has_warning = 0;
 		if (type == 'workers') {
 			var workers_status="";
 			// sorting the content by id
 			//json.workers.sort(function(a,b) { return a.id - b.id } );
 			$.each(json.workers, function(index, d){
 				workers_status += "worker " + d.host + ":" + d.instance + " is " + d.status + ".\n";
+				if ( d.status == "dead" ) {
+					has_warning++;
+				}
 			});
+			if ( has_warning > 0 ) {
+				renderBadge('!', '#BF5C76');
+			} else {
+				renderBadge(' ', '#5CBFA5');
+			}
 
 			return workers_status;
 		} else if (type == 'jobs') {
 			var results_list="";
 			if (json.jobs.length > 0) {
-				var has_warning = 0
 				$.each(json.jobs, function(index, d){
 					results_list += d.id + ": " + d.name + " is " + d.state + "/" + d.result + ".\n";
-					if (d.result == "failed" ) {
-						has_warning = 1;
+					if ( d.result == "failed" ) {
+						has_warning++;
 					}
 				});
 				if ( has_warning > 0 ) {
@@ -42,6 +50,7 @@ function querying() {
 			} else {
 				results_list += "No Data!";
 			}
+
 			return results_list;
 		}
 	}
