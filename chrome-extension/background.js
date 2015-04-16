@@ -28,15 +28,15 @@ function querying() {
 	}
 
 	var instanceInfo = openqaNotifierSettings.settings.get('instanceUrl');
-	chrome.storage.local.set({'instanceInfo': instanceInfo}, function () {});
+	chrome.storage.local.set({'instanceInfo': instanceInfo});
 
 	// query workers
 	$.getJSON(instanceInfo + "api/v1/workers", function(data){
 	}).done(function(data){
 		var workersStatus = processJson('workers', data);
-		chrome.storage.local.set({'workersStatus': workersStatus}, function () {});
+		chrome.storage.local.set({'workersStatus': workersStatus});
 	}).fail(function(jqXHR, textStatus, errorThrown){
-		chrome.storage.local.set({'workersStatus': "Something goes wrong!"}, function () {});
+		chrome.storage.local.set({'workersStatus': "Something goes wrong!"});
 	});
 
 	var limitsVal = openqaNotifierSettings.settings.get('limits');
@@ -44,9 +44,9 @@ function querying() {
 	$.getJSON(instanceInfo + "api/v1/jobs?scope=current&limit=" + limitsVal, function(data){
 	}).done(function(data){
 		var resultsList = processJson('jobs', data);
-		chrome.storage.local.set({'resultsList': resultsList}, function () {});
+		chrome.storage.local.set({'resultsList': resultsList});
 	}).fail(function(jqXHR, textStatus, errorThrown){
-		chrome.storage.local.set({'resultsList': "Something goes wrong!"}, function () {});
+		chrome.storage.local.set({'resultsList': "Something goes wrong!"});
 	});
 }
 
